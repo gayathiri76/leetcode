@@ -1,0 +1,20 @@
+class Solution {
+    public int[] plusOne(int[] digits) {
+        // Iterate from the last digit to the first
+        for (int i = digits.length - 1; i >= 0; i--) {
+            if (digits[i] < 9) {
+                // If current digit is less than 9, just increment and return
+                digits[i]++;
+                return digits;
+            }
+            // If it's 9, it becomes 0 and the carry moves to the next digit
+            digits[i] = 0;
+        }
+
+        // If we reach here, it means all digits were 9 (e.g., 99 -> 00)
+        // We need an extra 1 at the beginning (e.g., 100)
+        int[] result = new int[digits.length + 1];
+        result[0] = 1;
+        return result;
+    }
+}
