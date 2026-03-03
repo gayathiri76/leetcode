@@ -1,0 +1,28 @@
+class Solution {
+    public String addBinary(String a, String b) {
+        StringBuilder result = new StringBuilder();
+        int i = a.length() - 1; // Pointer for string a
+        int j = b.length() - 1; // Pointer for string b
+        int carry = 0;
+
+        // Loop until both strings are exhausted and there is no remaining carry
+        while (i >= 0 || j >= 0 || carry != 0) {
+            int sum = carry; // Start with the carry from the previous step
+
+            if (i >= 0) {
+                sum += a.charAt(i--) - '0'; // Convert char to int and add
+            }
+            if (j >= 0) {
+                sum += b.charAt(j--) - '0'; // Convert char to int and add
+            }
+
+            // Append the remainder (0 or 1) to the result
+            result.append(sum % 2);
+            // Calculate the new carry (1 if sum >= 2, else 0)
+            carry = sum / 2;
+        }
+
+        // The digits were added in reverse order, so we must reverse the final string
+        return result.reverse().toString();
+    }
+}
