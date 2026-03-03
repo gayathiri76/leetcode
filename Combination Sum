@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Arrays;
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        // Sorting helps in pruning the recursion tree early
+        Arrays.sort(candidates);
+        backtrack(result, new ArrayList<>(), candidates, target, 0);
+        return result;
+    }
+
+    private void backtrack(List<List<Integer>> result, List<Integer> tempList, int[] nums, int remain, int start) {
+        if (remain == 0) {
+            // Found a valid combination
+            result.add(new ArrayList<>(tempList));
+            return;
+        }
+
+        for (int i = start; i < nums.length; i++) {
+            // Optimization: If the current number is greater than the remaining target,
+            // no need to check this or any subsequent (larger) numbers.
+            if (nums[i] > remain) break;
+
+            tempList.add(nums[i]);
+            
+            // Recursive call: pass 'i' as the start index to allow reusing the same element
+            backtrack(result, tempList, nums, remain - nums[i], i);
+            
+            // Backtrack: remove the last element to try the next candidate
+            tempList.remove(tempList.size() - 1);
+        }
+    }
+}
