@@ -1,0 +1,41 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public String getPermutation(int n, int k) {
+        // 1. Create a list of numbers to get digits from [1, 2, ..., n]
+        List<Integer> numbers = new ArrayList<>();
+        // 2. Precompute factorials up to n-1
+        int[] factorial = new int[n];
+        factorial[0] = 1;
+        
+        for (int i = 1; i < n; i++) {
+            factorial[i] = factorial[i - 1] * i;
+            numbers.add(i);
+        }
+        numbers.add(n); // Add the last number
+
+        // Adjust k to be 0-indexed
+        k--;
+
+        StringBuilder sb = new StringBuilder();
+
+        // 3. Build the permutation digit by digit
+        for (int i = n; i > 0; i--) {
+            // Find the size of the block for the current position
+            int factSize = factorial[i - 1];
+            
+            // Calculate index of the number to pick
+            int index = k / factSize;
+            
+            // Append the number and remove it from the list
+            sb.append(numbers.get(index));
+            numbers.remove(index);
+            
+            // Update k for the next iteration
+            k %= factSize;
+        }
+
+        return sb.toString();
+    }
+}
