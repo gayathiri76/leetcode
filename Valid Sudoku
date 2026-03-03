@@ -1,0 +1,28 @@
+class Solution {
+    public boolean isValidSudoku(char[][] board) {
+        // Use a HashSet to track seen numbers with their context
+        // Contexts: "row", "column", and "block"
+        Set<String> seen = new HashSet<>();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char number = board[i][j];
+                
+                // Only check if the cell is not empty
+                if (number != '.') {
+                    // Create unique strings to represent the number in its row, col, and block
+                    String rowKey = number + " in row " + i;
+                    String colKey = number + " in col " + j;
+                    String blockKey = number + " in block " + (i / 3) + "-" + (j / 3);
+
+                    // .add() returns false if the element is already present in the set
+                    if (!seen.add(rowKey) || !seen.add(colKey) || !seen.add(blockKey)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+}
