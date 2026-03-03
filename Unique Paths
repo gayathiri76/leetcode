@@ -1,0 +1,22 @@
+import java.util.Arrays;
+
+class Solution {
+    public int uniquePaths(int m, int n) {
+        // Optimization: Use a 1D array to save space O(n)
+        int[] dp = new int[n];
+        
+        // Base case: There is only 1 way to reach any cell in the first row (always moving right)
+        Arrays.fill(dp, 1);
+        
+        // Iterate through each row starting from the second row
+        for (int i = 1; i < m; i++) {
+            // For each cell, paths = paths from top (dp[j]) + paths from left (dp[j-1])
+            for (int j = 1; j < n; j++) {
+                dp[j] += dp[j - 1];
+            }
+        }
+        
+        // The last element contains the result for the bottom-right corner
+        return dp[n - 1];
+    }
+}
