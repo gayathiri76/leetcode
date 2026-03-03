@@ -1,0 +1,20 @@
+class Solution {
+    public int removeDuplicates(int[] nums) {
+        if (nums.length == 0) return 0;
+        
+        // 'i' is the slow pointer, tracking the position of unique elements
+        int i = 0;
+        
+        // 'j' is the fast pointer, exploring the array
+        for (int j = 1; j < nums.length; j++) {
+            // When we find a new unique element
+            if (nums[j] != nums[i]) {
+                i++;           // Move the slow pointer
+                nums[i] = nums[j]; // Update the next unique position with the new value
+            }
+        }
+        
+        // The number of unique elements is the index i + 1
+        return i + 1;
+    }
+}
