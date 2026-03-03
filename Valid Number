@@ -1,0 +1,41 @@
+class Solution {
+    public boolean isNumber(String s) {
+        // Flags to track what we have seen so far
+        boolean seenDigit = false;
+        boolean seenDot = false;
+        boolean seenExponent = false;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (Character.isDigit(c)) {
+                seenDigit = true;
+            } else if (c == '+' || c == '-') {
+                // A sign is only valid at the start or immediately after an 'e'/'E'
+                if (i > 0 && s.charAt(i - 1) != 'e' && s.charAt(i - 1) != 'E') {
+                    return false;
+                }
+            } else if (c == 'e' || c == 'E') {
+                // Exponent is valid only if we haven't seen one yet AND we have seen digits
+                if (seenExponent || !seenDigit) {
+                    return false;
+                }
+                seenExponent = true;
+                // Reset digit flag because an exponent MUST be followed by a new integer
+                seenDigit = false;
+            } else if (c == '.') {
+                // A dot is valid only if we haven't seen a dot OR an exponent yet
+                if (seenDot || seenExponent) {
+                    return false;
+                }
+                seenDot = true;
+            } else {
+                // Any other character (like 'a', 'abc', etc.) is invalid
+                return false;
+            }
+        }
+
+        // The string is valid only if it contains at least one digit
+        return seenDigit;
+    }
+}
