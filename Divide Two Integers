@@ -1,0 +1,37 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        // Handle overflow case: -2^31 / -1 = 2^31 (exceeds 2^31 - 1)
+        if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        // Determine the sign of the result
+        // true if signs are different, false if they are the same
+        boolean negative = (dividend < 0) ^ (divisor < 0);
+
+        // Work with negative numbers to avoid overflow when converting MIN_VALUE
+        // (Math.abs(Integer.MIN_VALUE) overflows a 32-bit signed int)
+        long lDividend = Math.abs((long) dividend);
+        long lDivisor = Math.abs((long) divisor);
+
+        int quotient = 0;
+
+        // Perform the division using bit shifting
+        while (lDividend >= lDivisor) {
+            long temp = lDivisor;
+            long multiple = 1;
+            
+            // Double the divisor until it's larger than the remaining dividend
+            while (lDividend >= (temp << 1)) {
+                temp <<= 1;
+                multiple <<= 1;
+            }
+
+            // Subtract the largest power-of-2 multiple found
+            lDividend -= temp;
+            quotient += multiple;
+        }
+
+        return negative ? -quotient : quotient;
+    }
+}
