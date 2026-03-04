@@ -1,0 +1,22 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    /**
+     * Generates an n-bit Gray code sequence using the formula: i ^ (i >> 1)
+     * Time Complexity: O(2^n)
+     * Space Complexity: O(1) (excluding the output list)
+     */
+    public List<Integer> grayCode(int n) {
+        List<Integer> result = new ArrayList<>();
+        // There are 2^n numbers in an n-bit sequence
+        int numElements = 1 << n; 
+        
+        for (int i = 0; i < numElements; i++) {
+            // XOR the number with its right-shifted version to get the Gray code
+            result.add(i ^ (i >> 1));
+        }
+        
+        return result;
+    }
+}
