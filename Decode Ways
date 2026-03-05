@@ -1,0 +1,30 @@
+class Solution {
+    public int numDecodings(String s) {
+        if (s == null || s.length() == 0 || s.charAt(0) == '0') {
+            return 0;
+        }
+
+        int n = s.length();
+        // dp[i] stores the number of ways to decode the string of length i
+        int[] dp = new int[n + 1];
+        
+        dp[0] = 1; // Base case: empty string
+        dp[1] = 1; // Base case: first character (already checked for '0')
+
+        for (int i = 2; i <= n; i++) {
+            // Check single digit (must not be '0')
+            int oneDigit = Integer.parseInt(s.substring(i - 1, i));
+            if (oneDigit >= 1) {
+                dp[i] += dp[i - 1];
+            }
+
+            // Check two digits (must be between 10 and 26)
+            int twoDigits = Integer.parseInt(s.substring(i - 2, i));
+            if (twoDigits >= 10 && twoDigits <= 26) {
+                dp[i] += dp[i - 2];
+            }
+        }
+
+        return dp[n];
+    }
+}
