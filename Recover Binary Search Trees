@@ -1,0 +1,41 @@
+class Solution {
+    // Pointers to the two nodes that need to be swapped
+    private TreeNode first = null;
+    private TreeNode second = null;
+    // Tracks the previously visited node in inorder traversal
+    private TreeNode prev = null;
+
+    public void recoverTree(TreeNode root) {
+        // Step 1: Find the two misplaced nodes using inorder traversal
+        findNodes(root);
+
+        // Step 2: Swap the values of the two nodes found
+        if (first != null && second != null) {
+            int temp = first.val;
+            first.val = second.val;
+            second.val = temp;
+        }
+    }
+
+    private void findNodes(TreeNode root) {
+        if (root == null) return;
+
+        // Traverse Left
+        findNodes(root.left);
+
+        // Process Current Node (Inorder Logic)
+        if (prev != null && prev.val > root.val) {
+            // If this is the first violation, the first node is 'prev'
+            if (first == null) {
+                first = prev;
+            }
+            // The second node is always the 'root' in a violation
+            // If there's a second violation further down, this will be updated
+            second = root;
+        }
+        prev = root;
+
+        // Traverse Right
+        findNodes(root.right);
+    }
+}
