@@ -1,0 +1,38 @@
+class Solution {
+    // These pointers keep track of the two nodes to be swapped
+    private TreeNode first = null;
+    private TreeNode second = null;
+    // previous node visited during inorder traversal
+    private TreeNode prev = new TreeNode(Integer.MIN_VALUE);
+
+    public void recoverTree(TreeNode root) {
+        // Step 1: Traverse the tree to find the two misplaced nodes
+        traverse(root);
+
+        // Step 2: Swap the values of the two nodes
+        int temp = first.val;
+        first.val = second.val;
+        second.val = temp;
+    }
+
+    private void traverse(TreeNode root) {
+        if (root == null) return;
+
+        // Standard Inorder: Left -> Root -> Right
+        traverse(root.left);
+
+        // If the current node is smaller than the previous, we found a violation
+        if (first == null && prev.val >= root.val) {
+            first = prev;
+        }
+        
+        // If 'first' is already found, 'second' is the last node that violates the rule
+        if (first != null && prev.val >= root.val) {
+            second = root;
+        }
+        
+        prev = root;
+
+        traverse(root.right);
+    }
+}
