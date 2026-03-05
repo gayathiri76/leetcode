@@ -1,0 +1,24 @@
+class Solution {
+    public int numTrees(int n) {
+        // dp[i] stores the number of unique BSTs that can be formed with i nodes
+        int[] dp = new int[n + 1];
+        
+        // Base cases
+        dp[0] = 1; // Empty tree
+        dp[1] = 1; // Tree with one node
+        
+        // Fill the dp table for each number of nodes from 2 up to n
+        for (int totalNodes = 2; totalNodes <= n; totalNodes++) {
+            // For a tree with 'totalNodes', consider each node 'i' as the root
+            for (int root = 1; root <= totalNodes; root++) {
+                int leftNodes = root - 1;
+                int rightNodes = totalNodes - root;
+                
+                // The number of unique BSTs with 'root' is (left ways) * (right ways)
+                dp[totalNodes] += dp[leftNodes] * dp[rightNodes];
+            }
+        }
+        
+        return dp[n];
+    }
+}
