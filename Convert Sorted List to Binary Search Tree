@@ -1,0 +1,32 @@
+class Solution {
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) return null;
+        if (head.next == null) return new TreeNode(head.val);
+        
+        // Find the middle of the list
+        ListNode prev = null;
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        // 'slow' is now the middle node; disconnect the left half
+        if (prev != null) {
+            prev.next = null;
+        }
+        
+        // Create the root node
+        TreeNode root = new TreeNode(slow.val);
+        
+        // Recursively build left and right subtrees
+        // Left side is head to prev, right side is slow.next onwards
+        root.left = sortedListToBST(head);
+        root.right = sortedListToBST(slow.next);
+        
+        return root;
+    }
+}
