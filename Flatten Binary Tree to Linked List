@@ -1,0 +1,24 @@
+class Solution {
+    public void flatten(TreeNode root) {
+        TreeNode curr = root;
+        
+        while (curr != null) {
+            if (curr.left != null) {
+                // 1. Find the rightmost node in the left subtree
+                TreeNode predecessor = curr.left;
+                while (predecessor.right != null) {
+                    predecessor = predecessor.right;
+                }
+                
+                // 2. Connect the original right subtree to that rightmost node
+                predecessor.right = curr.right;
+                
+                // 3. Move the entire left subtree to the right
+                curr.right = curr.left;
+                curr.left = null;
+            }
+            // 4. Move to the next node on the right
+            curr = curr.right;
+        }
+    }
+}
