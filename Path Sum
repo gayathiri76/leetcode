@@ -1,0 +1,19 @@
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        // 1. Base case: If the node is null, no path exists.
+        if (root == null) {
+            return false;
+        }
+
+        // 2. Check if we are at a leaf node.
+        // If the remaining sum equals the leaf's value, we found a path.
+        if (root.left == null && root.right == null) {
+            return targetSum == root.val;
+        }
+
+        // 3. Recursively check left and right subtrees.
+        // Subtract current node's value from the targetSum.
+        return hasPathSum(root.left, targetSum - root.val) || 
+               hasPathSum(root.right, targetSum - root.val);
+    }
+}
