@@ -1,0 +1,27 @@
+import java.util.*;
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // Use a Set for O(1) word lookups
+        Set<String> wordSet = new HashSet<>(wordDict);
+        
+        // dp[i] is true if the substring s[0...i-1] can be segmented
+        boolean[] dp = new boolean[s.length() + 1];
+        
+        // Base case: an empty string is always segmentable
+        dp[0] = true;
+        
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                // If s[0...j-1] is valid and s[j...i-1] is in the dictionary, then s[0...i-1] is valid
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    // Found a valid split for index i, move to index i + 1
+                    break;
+                }
+            }
+        }
+        
+        return dp[s.length()];
+    }
+}
