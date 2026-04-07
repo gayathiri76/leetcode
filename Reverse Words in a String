@@ -1,0 +1,21 @@
+class Solution {
+    public String reverseWords(String s) {
+        // 1. Trim leading/trailing spaces and split by one or more spaces
+        String[] words = s.trim().split("\\s+");
+        
+        // 2. Use a StringBuilder to efficiently build the result
+        StringBuilder result = new StringBuilder();
+        
+        // 3. Iterate through the array backwards
+        for (int i = words.length - 1; i >= 0; i--) {
+            result.append(words[i]);
+            
+            // 4. Add a space between words, but not after the last one
+            if (i > 0) {
+                result.append(" ");
+            }
+        }
+        
+        return result.toString();
+    }
+}
