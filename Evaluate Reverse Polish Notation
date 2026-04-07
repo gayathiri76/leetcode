@@ -1,0 +1,32 @@
+import java.util.Stack;
+
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Stack<Integer> stack = new Stack<>();
+
+        for (String token : tokens) {
+            if (isOperator(token)) {
+                // The first pop is the second operand (right side)
+                int b = stack.pop();
+                // The second pop is the first operand (left side)
+                int a = stack.pop();
+                
+                switch (token) {
+                    case "+": stack.push(a + b); break;
+                    case "-": stack.push(a - b); break;
+                    case "*": stack.push(a * b); break;
+                    case "/": stack.push(a / b); break; // Java truncates toward zero by default
+                }
+            } else {
+                // If it's a number, push it onto the stack
+                stack.push(Integer.parseInt(token));
+            }
+        }
+
+        return stack.pop();
+    }
+
+    private boolean isOperator(String s) {
+        return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/");
+    }
+}
