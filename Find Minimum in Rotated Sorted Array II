@@ -1,0 +1,24 @@
+class Solution {
+    public int findMin(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (nums[mid] > nums[right]) {
+                // Minimum must be in the right half
+                left = mid + 1;
+            } else if (nums[mid] < nums[right]) {
+                // Minimum is at mid or in the left half
+                right = mid;
+            } else {
+                // The "Hard" part: when nums[mid] == nums[right], 
+                // we aren't sure where the min is. Safely shrink the search space.
+                right--;
+            }
+        }
+
+        return nums[left];
+    }
+}
