@@ -1,0 +1,40 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public int maxPoints(int[][] points) {
+        int n = points.length;
+        if (n <= 2) return n;
+
+        int maxPoints = 1;
+
+        for (int i = 0; i < n; i++) {
+            // Map to store: Slope -> Count of points with that slope from point i
+            Map<Double, Integer> slopeCount = new HashMap<>();
+            
+            for (int j = i + 1; j < n; j++) {
+                double slope = calculateSlope(points[i], points[j]);
+                slopeCount.put(slope, slopeCount.getOrDefault(slope, 0) + 1);
+            }
+
+            // Find the highest count for the current anchor point
+            for (int count : slopeCount.values()) {
+                maxPoints = Math.max(maxPoints, count + 1);
+            }
+        }
+
+        return maxPoints;
+    }
+
+    private double calculateSlope(int[] p1, int[] p2) {
+        int dx = p2[0] - p1[0];
+        int dy = p2[1] - p1[1];
+
+        if (dx == 0) return Double.POSITIVE_INFINITY; // Vertical line
+        if (dy == 0) return 0.0;                       // Horizontal line
+        
+        // Use double for slope. (dy / dx)
+        // Adding 0.0 handles the -0.0 vs 0.0 case in Java
+        return (double) dy / (double) dx + 0.0;
+    }
+}
