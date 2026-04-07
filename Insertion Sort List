@@ -1,0 +1,37 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode dummy = new ListNode(0); // Helper node to start the sorted list
+        ListNode curr = head;             // The node we are currently positioning
+
+        while (curr != null) {
+            ListNode nextNode = curr.next; // Save the next node to process later
+            
+            // Find the right place to insert 'curr' in the sorted list starting from dummy
+            ListNode prev = dummy;
+            while (prev.next != null && prev.next.val < curr.val) {
+                prev = prev.next;
+            }
+
+            // Insert curr between prev and prev.next
+            curr.next = prev.next;
+            prev.next = curr;
+
+            // Move to the next node in the original unsorted list
+            curr = nextNode;
+        }
+
+        return dummy.next;
+    }
+}
