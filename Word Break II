@@ -1,0 +1,45 @@
+import java.util.*;
+
+class Solution {
+    // Memoization map to store results of substrings we've already processed
+    private Map<String, List<String>> memo = new HashMap<>();
+
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Set<String> wordSet = new HashSet<>(wordDict);
+        return backtrack(s, wordSet);
+    }
+
+    private List<String> backtrack(String s, Set<String> wordSet) {
+        // Return cached result if available
+        if (memo.containsKey(s)) {
+            return memo.get(s);
+        }
+
+        List<String> result = new ArrayList<>();
+        
+        // Base case: if the current string itself is a word, add it
+        if (wordSet.contains(s)) {
+            result.add(s);
+        }
+
+        // Try splitting the string at every possible index
+        for (int i = 1; i < s.length(); i++) {
+            String left = s.substring(0, i);
+            
+            // If the left part is a valid word, process the right part
+            if (wordSet.contains(left)) {
+                String right = s.substring(i);
+                List<String> rightPartitions = backtrack(right, wordSet);
+                
+                // Combine the left word with all possible partitions of the right part
+                for (String part : rightPartitions) {
+                    result.add(left + " " + part);
+                }
+            }
+        }
+
+        // Save result to memo and return
+        memo.put(s, result);
+        return result;
+    }
+}
