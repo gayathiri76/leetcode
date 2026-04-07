@@ -1,0 +1,80 @@
+import java.util.*;
+
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> res = new ArrayList<>();
+        Set<String> dict = new HashSet<>(wordList);
+        if (!dict.contains(endWord)) return res;
+
+        // Map to store the child -> parents relationship to reconstruct paths
+        Map<String, List<String>> adj = new HashMap<>();
+        // Map to store the distance from beginWord to each word
+        Map<String, Integer> visited = new HashMap<>();
+        
+        Queue<String> q = new LinkedList<>();
+        q.offer(beginWord);
+        visited.put(beginWord, 0);
+
+        boolean found = false;
+
+        // BFS to find the shortest distance and build the adjacency graph
+        while (!q.isEmpty()) {
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                String curr = q.poll();
+                int currDist = visited.get(curr);
+
+                if (curr.equals(endWord)) {
+                    found = true;
+                }
+
+                char[] chars = curr.toCharArray();
+                for (int j = 0; j < chars.length; j++) {
+                    char old = chars[j];
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        if (c == old) continue;
+                        chars[j] = c;
+                        String next = new String(chars);
+
+                        if (dict.contains(next)) {
+                            // If first time visiting or visiting at the same shortest level
+                            if (!visited.containsKey(next) || visited.get(next) == currDist + 1) {
+                                if (!visited.containsKey(next)) {
+                                    visited.put(next, currDist + 1);
+                                    q.offer(next);
+                                }
+                                adj.computeIfAbsent(next, k -> new ArrayList<>()).add(curr);
+                            }
+                        }
+                    }
+                    chars[j] = old;
+                }
+            }
+            if (found) break; // Shortest path found, no need to look deeper
+        }
+
+        if (found) {
+            Deque<String> path = new ArrayDeque<>();
+            path.addFirst(endWord);
+            backtrack(endWord, beginWord, adj, path, res);
+        }
+
+        return res;
+    }
+
+    // DFS to reconstruct all paths from endWord back to beginWord
+    private void backtrack(String curr, String start, Map<String, List<String>> adj, Deque<String> path, List<List<String>> res) {
+        if (curr.equals(start)) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        if (adj.containsKey(curr)) {
+            for (String prev : adj.get(curr)) {
+                path.addFirst(prev);
+                backtrack(prev, start, adj, path, res);
+                path.removeFirst();
+            }
+        }
+    }
+}
