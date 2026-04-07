@@ -1,0 +1,30 @@
+class Solution {
+    public Node connect(Node root) {
+        Node curr = root; // Pointer for the level we are currently on
+        
+        while (curr != null) {
+            Node dummy = new Node(0); // Dummy node for the level below
+            Node temp = dummy; // Tail pointer for the level below
+            
+            while (curr != null) {
+                // If left child exists, link it to the lower level list
+                if (curr.left != null) {
+                    temp.next = curr.left;
+                    temp = temp.next;
+                }
+                // If right child exists, link it
+                if (curr.right != null) {
+                    temp.next = curr.right;
+                    temp = temp.next;
+                }
+                // Move to the next node in the current level
+                curr = curr.next;
+            }
+            
+            // Move down to the start of the level we just built
+            curr = dummy.next;
+        }
+        
+        return root;
+    }
+}
