@@ -1,0 +1,24 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        // Variables to track the cost and profit of two potential transactions
+        int firstBuy = Integer.MAX_VALUE;
+        int firstProfit = 0;
+        int secondBuy = Integer.MAX_VALUE;
+        int secondProfit = 0;
+
+        for (int price : prices) {
+            // 1. Minimum cost for the first purchase
+            firstBuy = Math.min(firstBuy, price);
+            // 2. Maximum profit from the first sale
+            firstProfit = Math.max(firstProfit, price - firstBuy);
+            
+            // 3. Minimum "reinvested" cost for the second purchase
+            // (We subtract the first profit to see how much of our own money is left)
+            secondBuy = Math.min(secondBuy, price - firstProfit);
+            // 4. Maximum total profit after the second sale
+            secondProfit = Math.max(secondProfit, price - secondBuy);
+        }
+
+        return secondProfit;
+    }
+}
