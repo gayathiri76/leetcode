@@ -1,0 +1,61 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class LRUCache {
+    // Doubly Linked List Node to store key-value pairs
+    private class Node {
+        int key, value;
+        Node prev, next;
+        Node(int k, int v) { this.key = k; this.value = v; }
+    }
+
+    private final int capacity;
+    private final Map<Integer, Node> map;
+    private final Node head, tail; // Dummy nodes to simplify boundary logic
+
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+        this.map = new HashMap<>();
+        head = new Node(0, 0);
+        tail = new Node(0, 0);
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        
+        Node node = map.get(key);
+        remove(node);      // Unlink node
+        moveToHead(node);  // Mark as most recently used
+        return node.value;
+    }
+
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            remove(map.get(key)); // Remove old version
+        } else if (map.size() == capacity) {
+            // Evict the least recently used (node before tail)
+            map.remove(tail.prev.key);
+            remove(tail.prev);
+        }
+        
+        Node newNode = new Node(key, value);
+        moveToHead(newNode);
+        map.put(key, newNode);
+    }
+
+    // Helper: Unlinks a node from its current position
+    private void remove(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    // Helper: Places a node directly after the dummy head
+    private void moveToHead(Node node) {
+        node.next = head.next;
+        node.next.prev = node;
+        head.next = node;
+        node.prev = head;
+    }
+}
