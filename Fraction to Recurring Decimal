@@ -1,0 +1,46 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) return "0";
+        
+        StringBuilder res = new StringBuilder();
+        // Handle negative signs (XOR: if one is negative, result is negative)
+        if (numerator < 0 ^ denominator < 0) {
+            res.append("-");
+        }
+        
+        // Use long to prevent overflow (e.g., -2147483648 / -1)
+        long num = Math.abs((long) numerator);
+        long den = Math.abs((long) denominator);
+        
+        // Integer part
+        res.append(num / den);
+        long remainder = num % den;
+        if (remainder == 0) return res.toString();
+        
+        // Fractional part
+        res.append(".");
+        // Map to store (remainder, position in string) to detect cycles
+        Map<Long, Integer> map = new HashMap<>();
+        
+        while (remainder != 0) {
+            if (map.containsKey(remainder)) {
+                // Insert "(" at the start of the repeating sequence
+                res.insert(map.get(remainder), "(");
+                res.append(")");
+                break;
+            }
+            
+            // Record current remainder and its position
+            map.put(remainder, res.length());
+            
+            remainder *= 10;
+            res.append(remainder / den);
+            remainder %= den;
+        }
+        
+        return res.toString();
+    }
+}
