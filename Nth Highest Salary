@@ -1,0 +1,11 @@
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  -- Adjust N because LIMIT OFFSET starts at 0 (e.g., 2nd highest has offset 1)
+  SET N = N - 1;
+  RETURN (
+      SELECT DISTINCT salary
+      FROM Employee
+      ORDER BY salary DESC
+      LIMIT 1 OFFSET N
+  );
+END
